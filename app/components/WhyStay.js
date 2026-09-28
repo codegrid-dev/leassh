@@ -34,7 +34,7 @@ export default function WhyStay() {
               </div>
               <div className="why-item rv">
                 <i><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg></i>
-                <div><h4>Your licences get you noticed</h4><p>Upload a council boarding licence, insurance or canine first aid and we show the badge on your profile. Badged Pet Nannies get more enquiries.</p></div>
+                <div><h4>Your licences get you noticed</h4><p>Tell us if you hold a council boarding licence, insurance or canine first aid. Pet Nannies who do get noticeably more enquiries.</p></div>
               </div>
             </div>
           </div>

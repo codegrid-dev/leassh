@@ -25,7 +25,7 @@ export default function Stories() {
               </div>
             </div>
             <div className="story rv">
-              <p className="story-q">&quot;I got my home boarding licence from the council, uploaded it, and had four enquiries in a fortnight. Retirement is a lot more fun with a spaniel in it.&quot;</p>
+              <p className="story-q">&quot;I got my home boarding licence from the council, said so on the form, and had four enquiries in a fortnight. Retirement is a lot more fun with a spaniel in it.&quot;</p>
               <div className="story-who">
                 <div className="avatar" style={{background: 'linear-gradient(135deg,#FFB020,#FF8A3D)'}}>JP</div>
                 <div><b>Jean P.</b><span>Cardiff · Home boarding</span></div>
@@ -36,7 +36,7 @@ export default function Stories() {
         </div>
       </section>
 
-      {/* ============ APPLY ============ */}
+      {/* ============ BUSINESSES ============ */}
     </>
   );
 }

@@ -35,7 +35,7 @@ const Field = ({ id, label, bad, err, children }) => (
 export default function Business() {
   const [v, setV] = useState({
     bizType: "", bizName: "", bizPc: "", bizRcvs: "", bizLic: "",
-    bizContact: "", bizEmail: "", services: [], auth: false,
+    bizContact: "", bizEmail: "", services: [], auth: false, partner: false, mkt: false,
   });
   const [bad, setBad] = useState({});
   const [done, setDone] = useState(null);
@@ -68,6 +68,7 @@ export default function Business() {
       bizLic: showLic && !v.bizLic.trim(),
       services: v.services.length === 0,
       auth: !v.auth,
+      partner: !v.partner,
     };
     setBad(b);
     if (Object.values(b).some(Boolean)) {
@@ -122,7 +123,7 @@ export default function Business() {
             {!done && (
               <form id="bizForm" noValidate onSubmit={submit}>
                 <h3>List your business</h3>
-                <p>We verify every listing before it goes live. No cost to list.</p>
+                <p>We check every listing before it goes live. No cost to list.</p>
 
                 <Field id="bizType" label="What kind of business are you?" bad={bad.bizType}
                   err="Please choose a business type">
@@ -187,14 +188,35 @@ export default function Business() {
                   <span className="err">Please choose at least one service</span>
                 </div>
 
-                <div className={`checkline${bad.auth ? " bad" : ""}`}
-                  style={{ borderTop: "1px solid var(--line-2)" }}>
-                  <input type="checkbox" id="bizAuth" checked={v.auth} onChange={set("auth")} />
-                  <label htmlFor="bizAuth">
-                    I am authorised to list this business and confirm it holds every licence and
-                    registration the law requires.
-                  </label>
+                <div style={{ borderTop: "1px solid var(--line-2)", marginTop: "6px" }}>
+                  <div className={`checkline${bad.auth ? " bad" : ""}`}>
+                    <input type="checkbox" id="bizAuth" checked={v.auth} onChange={set("auth")} />
+                    <label htmlFor="bizAuth">
+                      I am authorised to list this business and confirm it holds every{" "}
+                      <b>licence and registration</b> the law requires.
+                    </label>
+                  </div>
+                  <div className={`checkline${bad.partner ? " bad" : ""}`}>
+                    <input type="checkbox" id="bizPartner" checked={v.partner} onChange={set("partner")} />
+                    <label htmlFor="bizPartner">
+                      I understand Leashh will pass these details to{" "}
+                      <b>a pet services company that operates the network</b>, and I agree that it
+                      may contact this business directly about listing and onboarding.
+                    </label>
+                  </div>
+                  <div className="checkline">
+                    <input type="checkbox" id="bizMkt" checked={v.mkt} onChange={set("mkt")} />
+                    <label htmlFor="bizMkt">
+                      Send us occasional emails about new features and how to get more enquiries.
+                      Optional.
+                    </label>
+                  </div>
                 </div>
+                {(bad.auth || bad.partner) && (
+                  <span className="err" id="bizGateErr" style={{ display: "block" }}>
+                    Please confirm both required boxes before you submit
+                  </span>
+                )}
 
                 <button type="submit" className="btn btn-primary btn-block" style={{ marginTop: "20px" }}>
                   Request a listing
