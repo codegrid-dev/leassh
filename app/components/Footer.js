@@ -30,8 +30,8 @@ export default function Footer() {
               <h4>Company</h4>
               <ul>
                 <li><a href="#">About Leashh</a></li>
-                <li><a href="terms.html">Pet Nanny terms</a></li>
-                <li><a href="privacy.html">Privacy notice</a></li>
+                <li><a href="/terms">Pet Nanny terms</a></li>
+                <li><a href="/privacy">Privacy notice</a></li>
                 <li><a href="#">Contact us</a></li>
                 <li><a href="#">Press</a></li>
               </ul>
@@ -39,7 +39,7 @@ export default function Footer() {
           </div>
           <div className="foot-bar">
             <span>© 2026 Leashh. All rights reserved.</span>
-            <span><a href="terms.html">Terms</a> · <a href="privacy.html">Privacy notice</a> · <a href="privacy.html#cookies">Cookies</a> · <a href="#">Modern slavery statement</a></span>
+            <span><a href="/terms">Terms</a> · <a href="/privacy">Privacy notice</a> · <a href="/privacy#cookies">Cookies</a> · <a href="#">Modern slavery statement</a></span>
           </div>
         </div>
       </footer>
