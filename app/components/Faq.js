@@ -6,7 +6,7 @@ export default function Faq() {
           <div className="sec-head faq-head rv">
             <span className="eyebrow">Before you sign up</span>
             <h2>The questions everyone asks</h2>
-            <p>Still stuck? Email <a href="mailto:nannies@leashh.co.uk" style={{color: 'var(--v-700)', fontWeight: '700'}}>nannies@leashh.co.uk</a> and a real person will answer.</p>
+            <p>Still stuck? Email <a href="mailto:nannies@leashh.com" style={{color: 'var(--v-700)', fontWeight: '700'}}>nannies@leashh.com</a> and a real person will answer.</p>
           </div>
           <div className="faq-list">
             <details className="qa rv"><summary>Do I need qualifications or experience?</summary><div className="a">For walking, drop-in visits, companionship and pet taxi work, no formal qualification is required. What owners care about is that you write honestly about the animals you are confident with, and that you turn up. If you plan to board animals in your own home you will need a licence from your council, and grooming customers usually look for a recognised qualification.</div></details>
