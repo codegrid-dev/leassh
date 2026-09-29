@@ -14,7 +14,7 @@ export function clientIp(request) {
 export async function ipIsOverLimit(ip) {
   if (!ip) return false;
   const since = new Date(Date.now() - IP_WINDOW_MINUTES * 60_000).toISOString();
-  const { count } = await db
+  const { count } = await db()
     .from("applicants")
     .select("id", { count: "exact", head: true })
     .eq("created_ip", ip)
@@ -24,7 +24,7 @@ export async function ipIsOverLimit(ip) {
 
 export async function sendIsOverLimit(applicantId) {
   const since = new Date(Date.now() - SEND_WINDOW_MINUTES * 60_000).toISOString();
-  const { count } = await db
+  const { count } = await db()
     .from("verification_codes")
     .select("id", { count: "exact", head: true })
     .eq("applicant_id", applicantId)

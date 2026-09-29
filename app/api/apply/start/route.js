@@ -25,7 +25,7 @@ export async function POST(request) {
   const { errors, value } = validateDetails(body);
   if (Object.keys(errors).length) return NextResponse.json({ errors }, { status: 422 });
 
-  const { data: existing } = await db
+  const { data: existing } = await db()
     .from("applicants")
     .select("id, status")
     .eq("email", value.email)
@@ -39,7 +39,7 @@ export async function POST(request) {
   let applicantId = existing?.id;
 
   if (applicantId) {
-    await db
+    await db()
       .from("applicants")
       .update({ first_name: value.firstName, last_name: value.lastName, mobile: value.mobile })
       .eq("id", applicantId);
@@ -47,7 +47,7 @@ export async function POST(request) {
     if (await ipIsOverLimit(ip)) {
       return NextResponse.json({ error: "Too many applications from this connection. Try again later." }, { status: 429 });
     }
-    const { data, error } = await db
+    const { data, error } = await db()
       .from("applicants")
       .insert({
         first_name: value.firstName,

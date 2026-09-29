@@ -14,7 +14,7 @@ export async function POST(request) {
     return NextResponse.json({ error: "Enter the six digit code" }, { status: 400 });
   }
 
-  const { data: row } = await db
+  const { data: row } = await db()
     .from("verification_codes")
     .select("id, code_hash, expires_at, attempts")
     .eq("applicant_id", applicantId)
@@ -37,7 +37,7 @@ export async function POST(request) {
 
   if (!verifyCode(String(code), row.code_hash)) {
     const attempts = row.attempts + 1;
-    await db.from("verification_codes").update({ attempts }).eq("id", row.id);
+    await db().from("verification_codes").update({ attempts }).eq("id", row.id);
     return NextResponse.json(
       {
         error:
@@ -52,8 +52,8 @@ export async function POST(request) {
   }
 
   const now = new Date().toISOString();
-  await db.from("verification_codes").update({ consumed_at: now }).eq("id", row.id);
-  await db
+  await db().from("verification_codes").update({ consumed_at: now }).eq("id", row.id);
+  await db()
     .from("applicants")
     .update({ status: "verified", verified_at: now })
     .eq("id", applicantId)

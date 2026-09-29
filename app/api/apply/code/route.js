@@ -10,7 +10,7 @@ export async function POST(request) {
   const { applicantId } = await request.json().catch(() => ({}));
   if (!applicantId) return NextResponse.json({ error: "Missing application" }, { status: 400 });
 
-  const { data: a } = await db
+  const { data: a } = await db()
     .from("applicants")
     .select("id, email, first_name, status")
     .eq("id", applicantId)

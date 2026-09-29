@@ -17,7 +17,7 @@ export async function POST(request) {
     return NextResponse.json({ errors: { email: "Please enter a valid email address" } }, { status: 422 });
   }
 
-  const { data: a } = await db
+  const { data: a } = await db()
     .from("applicants")
     .select("id, first_name, email, status")
     .eq("id", applicantId)
@@ -27,7 +27,7 @@ export async function POST(request) {
 
   if (email !== a.email) {
     // the address is unique, so a collision means that inbox is already in play
-    const { data: clash } = await db
+    const { data: clash } = await db()
       .from("applicants")
       .select("id")
       .eq("email", email)
@@ -40,7 +40,7 @@ export async function POST(request) {
       );
     }
     // a changed address is an unverified address again
-    await db
+    await db()
       .from("applicants")
       .update({ email, status: "pending_verification", verified_at: null })
       .eq("id", applicantId);

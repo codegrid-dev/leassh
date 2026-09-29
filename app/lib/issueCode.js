@@ -6,7 +6,7 @@ import { sendVerificationCode } from "./mail";
 // live code per applicant via a partial unique index, so the invalidation has
 // to happen before the insert, not after.
 export async function issueCode(applicantId, email, firstName) {
-  await db
+  await db()
     .from("verification_codes")
     .update({ invalidated_at: new Date().toISOString() })
     .eq("applicant_id", applicantId)
@@ -14,7 +14,7 @@ export async function issueCode(applicantId, email, firstName) {
     .is("invalidated_at", null);
 
   const code = newCode();
-  await db.from("verification_codes").insert({
+  await db().from("verification_codes").insert({
     applicant_id: applicantId,
     code_hash: hashCode(code),
     expires_at: expiryFromNow(),
