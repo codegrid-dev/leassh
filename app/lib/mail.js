@@ -20,7 +20,10 @@ export async function sendVerificationCode({ to, firstName, code }) {
     console.log(`[mail disabled] code for ${to}: ${code}`);
     return { skipped: true };
   }
-  const { error } = await resend.emails.send({ from: FROM, to, subject, text });
+  const { data, error } = await resend.emails.send({ from: FROM, to, subject, text });
   if (error) throw new Error(`Resend: ${error.message || JSON.stringify(error)}`);
-  return { sent: true };
+  // The send key is restricted and cannot read the account, so this log line is
+  // the only handle we have when an applicant says nothing arrived.
+  console.log(`[mail] verification code sent, resend id ${data?.id}`);
+  return { sent: true, id: data?.id };
 }
