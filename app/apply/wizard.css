@@ -218,3 +218,12 @@
 /* The £ sits absolutely at left:12px, so the value needs the board's own
    padding-left:26px to clear it. Tabular figures stop the price jittering. */
 .ui .money-in .inp{font-weight:800;font-variant-numeric:tabular-nums}
+
+/* The board draws a declaration as a static div with a .box span. Mine is a
+   label wrapping a real checkbox, which the build notes require for the
+   keyboard and screen reader. The native control has to be hidden or it draws
+   a second box beside the styled one. The focus ring moves to .box, since that
+   is what a sighted keyboard user can actually see. */
+.ui .ck{cursor:pointer}
+.ui .ck input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.ui .ck:has(input:focus-visible) .box{outline:3px solid var(--v-600);outline-offset:3px}
