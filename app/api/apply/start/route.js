@@ -3,6 +3,7 @@ import { db } from "@/app/lib/db";
 import { validateDetails } from "@/app/lib/validate";
 import { clientIp, ipIsOverLimit, turnstileOk } from "@/app/lib/guard";
 import { issueCode } from "@/app/lib/issueCode";
+import { sendAlreadyApplied } from "@/app/lib/mail";
 
 export const runtime = "nodejs";
 
@@ -27,13 +28,22 @@ export async function POST(request) {
 
   const { data: existing } = await db()
     .from("applicants")
-    .select("id, status")
+    .select("id, status, first_name, reference")
     .eq("email", value.email)
     .maybeSingle();
 
-  // Already finished. Do not leak that, and do not start again.
+  // Already finished. The response is deliberately identical to a new
+  // application so nobody can use this endpoint to discover who has applied.
+  // The inbox gets the explanation instead of a code.
   if (existing?.status === "consented") {
-    return NextResponse.json({ applicantId: existing.id, alreadyComplete: true });
+    try {
+      await sendAlreadyApplied({
+        to: value.email, firstName: existing.first_name, reference: existing.reference,
+      });
+    } catch (e) {
+      console.error("[start] already-applied notice failed", e?.message);
+    }
+    return NextResponse.json({ applicantId: existing.id, resumed: true });
   }
 
   let applicantId = existing?.id;

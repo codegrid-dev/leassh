@@ -61,3 +61,33 @@ export async function sendConfirmation({ to, firstName, reference, postcode, mil
   console.log(`[mail] confirmation sent, resend id ${data?.id}`);
   return { sent: true, id: data?.id };
 }
+
+// Someone re-applying with an address that has already completed.
+//
+// The API answers exactly as it would for a new application, because a
+// different answer would let anyone check which addresses have applied, and
+// the record holds a home postcode. The truth goes to the inbox instead, so
+// only the person who owns it learns anything.
+export async function sendAlreadyApplied({ to, firstName, reference }) {
+  const subject = "You have already applied to Leashh";
+  const text = [
+    `Hello ${firstName},`,
+    ``,
+    `Someone just started a Leashh application with this email address, but you have already applied.`,
+    ``,
+    `Your reference is ${reference}. There is nothing more for you to do, and you do not need a code.`,
+    ``,
+    `The company that operates the Pet Nanny network will contact you directly, usually within five working days.`,
+    ``,
+    `If this was not you, you can ignore this email. Nothing has changed on your application.`,
+  ].join("\n");
+
+  if (!resend) {
+    console.log(`[mail disabled] already-applied notice for ${to}: ${reference}`);
+    return { skipped: true };
+  }
+  const { data, error } = await resend.emails.send({ from: FROM, to, subject, text });
+  if (error) throw new Error(`Resend: ${error.message || JSON.stringify(error)}`);
+  console.log(`[mail] already-applied notice sent, resend id ${data?.id}`);
+  return { sent: true, id: data?.id };
+}
