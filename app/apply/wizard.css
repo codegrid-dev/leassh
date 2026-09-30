@@ -1,17 +1,17 @@
-/* Wizard UI, lifted from leashh-wizard-screens (1).html, v2.0.
-   EVERY selector is scoped under .ui. globals.css still carries the homepage
-   prototype's old #apply form styles, and 28 class names collide with these
-   (rail-step, inp, chip, pick, tick, field and more). Without the scope the
-   two sheets fight and which wins depends on import order. */
-/* Wizard UI, lifted from leashh-wizard-screens (1).html, v2.0.
-   Only the product styles: the screen board's own scaffolding, its build-note
-   panels and its phone bezels are left behind. Colour and radius come from the
-   tokens already on :root in globals.css. */
+/* Wizard UI. Product styles lifted from leashh-wizard-screens (1).html, v2.0,
+   leaving behind the screen board's own scaffolding, build-note panels and
+   phone bezels.
+
+   EVERY selector is scoped under .ui. globals.css still styles the homepage's
+   business form, and class names collide (inp, chip, field, row, nav, tick and
+   more). Without the scope, which sheet wins depends on import order.
+
+   Comments are kept out of the generated section below, because a previous
+   pass let a comment swallow the scope prefix of the rule that followed it. */
+
 .ui h1, .ui h2, .ui h3, .ui h4{margin:0;line-height:1.1;letter-spacing:-.028em;font-weight:800}
 .ui p{margin:0}
 .ui a{color:inherit}
-.ui /* ---------- board chrome ---------- */
-.board-hd{padding:52px 48px 30px;border-bottom:1px solid rgba(255,255,255,.1)}
 .ui .tag{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:7px 14px;font-size:13px;font-weight:700;color:rgba(255,255,255,.82)}
 .ui .tag-v{background:rgba(148,87,255,.2);border-color:rgba(148,87,255,.45);color:#D8C2FF}
 .ui .tag-m{background:rgba(0,184,124,.16);border-color:rgba(0,184,124,.4);color:#8CE8C6}
@@ -27,7 +27,6 @@
 .ui .notes b{color:rgba(255,255,255,.92)}
 .ui .notes .flag{background:rgba(255,176,32,.14);border:1px solid rgba(255,176,32,.32);border-radius:9px;padding:11px 13px;color:#FFD89A;margin-top:14px;font-size:12.8px}
 .ui .notes .flag b{color:#FFE9C4}
-.ui /* ---------- rendered UI inside frames ---------- */
 .ui{font-size:16px;color:var(--ink);line-height:1.55}
 .ui h2, .ui h3{color:var(--ink)}
 .ui .ui-hdr{background:rgba(255,255,255,.94);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:24px;height:62px;padding:0 26px}
@@ -79,9 +78,8 @@
 .ui .note-a svg{color:var(--amber-ink)}
 .ui .note a{color:var(--v-700);font-weight:700}
 .ui .chips{display:flex;flex-wrap:wrap;gap:8px}
-.ui .chip{position:relative;display:inline-block}
-.ui .chip span{display:inline-block;padding:9px 14px;border-radius:999px;border:1.5px solid var(--line);font-size:13.2px;font-weight:600;background:#fff;color:var(--ink)}
-.ui .chip.on span{background:var(--v-600);border-color:var(--v-600);color:#fff;font-weight:700}
+.ui .chip{display:inline-block;padding:9px 14px;border-radius:999px;border:1.5px solid var(--line);font-size:13.2px;font-weight:600;background:#fff;color:var(--ink)}
+.ui .chip.on{background:var(--v-600);border-color:var(--v-600);color:#fff;font-weight:700}
 .ui .pick{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff;margin-bottom:9px}
 .ui .pick.on{border-color:var(--v-500);background:var(--v-50);box-shadow:0 0 0 4px rgba(148,87,255,.09)}
 .ui .pick-top{display:flex;align-items:center;gap:12px}
@@ -150,80 +148,149 @@
 .ui .steps-out{text-align:left;max-width:430px;margin:24px auto 0;display:grid;gap:11px}
 .ui .steps-out div{display:flex;gap:11px;align-items:flex-start;font-size:13.8px;color:var(--ink-2);line-height:1.5}
 .ui .steps-out i{width:24px;height:24px;border-radius:50%;background:var(--v-100);color:var(--v-700);display:grid;place-items:center;font-size:11.5px;font-weight:800;flex:none;font-style:normal}
-.ui /* mobile frames */
-.phones{display:flex;gap:26px;flex-wrap:wrap}
 @media (max-width:1240px){
   .ui .notes{background:rgba(255,255,255,.04);border-radius:14px;padding:18px}
 }
-@media (max-width:980px){
-  .ui .ui-shell{grid-template-columns:1fr}
-  .ui .rail-steps{display:none}
-}
-.ui /* ---------------------------------------------------------------------------
-   Interactive states. The board is static, .ui so it styles focus and the code
-   boxes with fixed classes on <i> elements. These are the live equivalents.
-   --------------------------------------------------------------------------- */
-.inp:focus{outline:none;border-color:var(--v-500);box-shadow:0 0 0 4px rgba(148,87,255,.14)}
+/* The board's own CSS hid the step list at 980px, but its build note says
+   "The step list disappears below 640px because the progress meter already
+   carries it", and the guidelines list 640 as the breakpoint. Two sources
+   against one, and the notes are the instructions, so 640 it is. The single
+   column it also set is covered by the 1000px rule below. */
+/* ===========================================================================
+   Everything below is ours, not the board's. Hand scoped.
+   =========================================================================== */
+
+/* Live interactive states. The board is static, so it draws focus and the code
+   boxes with fixed classes on <i> elements. */
+.ui .inp:focus{outline:none;border-color:var(--v-500);box-shadow:0 0 0 4px rgba(148,87,255,.14)}
 .ui .inp:focus-visible{outline:3px solid var(--v-600);outline-offset:3px}
-.ui .code input{width:46px;height:56px;border:1.5px solid var(--line);border-radius:12px;background:#fff;
+.ui .code input{
+  width:46px;height:56px;border:1.5px solid var(--line);border-radius:12px;background:#fff;
   font-style:normal;font-size:21px;font-weight:800;color:var(--ink);text-align:center;
-  font-family:inherit;font-variant-numeric:tabular-nums;padding:0;}
+  font-family:inherit;font-variant-numeric:tabular-nums;padding:0;
+}
 .ui .code input:focus{outline:none;border-color:var(--v-500);box-shadow:0 0 0 4px rgba(148,87,255,.14)}
 .ui .code input:focus-visible{outline:3px solid var(--v-600);outline-offset:3px}
 .ui .code.bad input{border-color:var(--rose);background:var(--rose-50)}
-.ui .linkish{background:none;border:0;padding:0;font:inherit;color:var(--v-700);font-weight:700;
-  text-decoration:underline;cursor:pointer;}
+
+.ui .linkish{
+  background:none;border:0;font:inherit;color:var(--v-700);font-weight:700;
+  text-decoration:underline;cursor:pointer;
+}
 .ui .linkish:disabled{opacity:.5;cursor:default}
 .ui .nav .back{background:none;border:0;cursor:pointer;font-family:inherit}
 .ui button.btn{font-family:inherit;cursor:pointer;border:0}
 .ui button.btn:disabled{opacity:.5;cursor:default}
 .ui .ui-nav .btn-out{cursor:pointer;font-family:inherit}
-.ui /* Step 3 and 4 are not built yet. This keeps the chrome honest meanwhile. */
-.soon{text-align:center;padding:34px 10px}
+.ui .ui-logo{text-decoration:none}
+.ui .ui-nav a{text-decoration:none;color:inherit}
+.ui .ui-nav a:hover{color:var(--v-700)}
+
+/* A step that is not built yet, kept honest inside the chrome. */
+.ui .soon{text-align:center;padding:34px 10px}
 .ui .soon h3{font-size:21px;letter-spacing:-.03em}
 .ui .soon p{color:var(--muted);margin-top:10px;font-size:14.6px;max-width:44ch;margin-inline:auto}
-@media (max-width:860px){
-  .ui /* The board's phone frames carry only the wordmark and Save and exit. */
-  .ui-nav a:not(.btn){display:none}
-  .ui .ui-shell{grid-template-columns:1fr;gap:20px;padding:20px 16px 26px}
+
+/* Step 3 controls. The board draws these as static spans. The pill sits on the
+   inner span because globals.css styles .chip span for the homepage's business
+   form, and a pill on the label as well would draw two. */
+/* The board styles .chip as the pill itself, because its chip is one element.
+   Mine is a label wrapping a hidden checkbox and a span, so the pill has to
+   move to the span, and the board's label styling has to be undone or the
+   border and the padding are both applied twice. */
+.ui .chip{
+  position:relative;display:inline-block;cursor:pointer;user-select:none;
+  padding:0;border:0;background:none;border-radius:0;font-size:inherit;
+}
+.ui .chip.on{background:none}
+.ui .chip span{
+  display:inline-block;padding:11px 14px;border-radius:999px;border:1.5px solid var(--line);
+  font-size:13.2px;font-weight:600;background:#fff;color:var(--ink);
+}
+.ui .chip span:hover{border-color:var(--v-200)}
+.ui .chip.on span{background:var(--v-600);border-color:var(--v-600);color:#fff;font-weight:700}
+.ui .chip input{position:absolute;opacity:0;width:1px;height:1px}
+.ui .chip:has(input:focus-visible) span{outline:3px solid var(--v-600);outline-offset:3px}
+
+.ui .pick{cursor:pointer}
+.ui .pick-top{min-height:44px}
+.ui .pick-top input[type="checkbox"]{position:absolute;opacity:0;width:1px;height:1px}
+.ui .pick:has(input:focus-visible){outline:3px solid var(--v-600);outline-offset:3px}
+.ui .pick.bad{border-color:var(--rose);background:var(--rose-50)}
+
+/* The £ sits absolutely at left:12px, so the value keeps the board's .inp
+   padding-left:26px to clear it. Tabular figures stop the price jittering. */
+.ui .money-in .inp{font-weight:800;font-variant-numeric:tabular-nums}
+
+.ui select.inp{appearance:none;cursor:pointer}
+.ui textarea.inp{min-height:96px;line-height:1.5;resize:vertical}
+
+/* A declaration is a label wrapping a real checkbox, which the build notes
+   require for the keyboard and screen reader. The native control has to be
+   hidden or it draws a second box beside the styled one, and the focus ring
+   moves to .box, which is what a sighted keyboard user can see. */
+.ui .ck{cursor:pointer}
+.ui .ck input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.ui .ck:has(input:focus-visible) .box{outline:3px solid var(--v-600);outline-offset:3px}
+
+/* A range input is a 6px track, so the control carries the 44px height and the
+   track is drawn by the pseudo-elements instead. */
+.ui .radius{
+  -webkit-appearance:none;appearance:none;width:100%;height:44px;
+  background:transparent;outline:none;
+}
+.ui .radius::-webkit-slider-runnable-track{height:6px;border-radius:99px;background:var(--line-2)}
+.ui .radius::-moz-range-track{height:6px;border-radius:99px;background:var(--line-2)}
+.ui .radius::-webkit-slider-thumb{
+  -webkit-appearance:none;width:18px;height:18px;border-radius:50%;margin-top:-6px;
+  background:var(--v-600);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);cursor:pointer;
+}
+.ui .radius::-moz-range-thumb{
+  width:18px;height:18px;border-radius:50%;background:var(--v-600);
+  border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);cursor:pointer;
+}
+.ui .radius:focus-visible{outline:3px solid var(--v-600);outline-offset:4px}
+
+/* Tap targets. "Minimum tap target 44 by 44px", guidelines page 8. Small text
+   controls grow their hit area with padding and take it back with margin, so
+   the surrounding layout is untouched. */
+.ui .nav .back{padding:12px 10px;margin:-12px -10px}
+.ui .resend .linkish{padding:11px 2px;margin:-11px -2px}
+.ui .sum-row .linkish{padding:13px 8px;margin:-13px -8px}
+.ui .ui-logo{display:inline-flex;align-items:center;min-height:44px}
+.ui .ui-nav{align-items:center}
+.ui .ui-nav a:not(.btn){
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;min-width:44px;padding-inline:6px;
+}
+.ui .ui-nav .btn-sm{min-height:44px}
+
+/* Breakpoints follow the guidelines: 1240, 1000, 640. Single column below
+   1000px; the step list goes at 640px, where the progress meter carries it. */
+@media (max-width:1000px){
+  .ui .ui-shell{grid-template-columns:1fr;gap:22px}
+}
+@media (max-width:640px){
+  /* "Two-column field rows stack." "The summary rows stack label over value." */
+  .ui .row{grid-template-columns:1fr}
+  .ui .sum-row{flex-direction:column;gap:4px}
+  .ui .sum-row .k{width:auto}
+  .ui .ui-nav a:not(.btn){display:none}
+  .ui .ui-shell{padding:20px 16px 26px}
   .ui .rail-steps{display:none}
   .ui .rail-help{display:none}
   .ui .card-body{padding:20px 18px 26px}
   .ui .card-top{padding:18px 18px 0}
   .ui .code{gap:6px}
-  .ui .code input{width:40px;height:52px;font-size:19px}
+  .ui .code input{width:44px;height:56px;font-size:19px}
 }
-.ui /* The board used spans here; these are real links now. */
-.ui-logo{text-decoration:none}
-.ui .ui-nav a{text-decoration:none;color:inherit}
-.ui .ui-nav a:hover{color:var(--v-700)}
-.ui /* Live controls for step 3. The board draws these as static spans. */
-.chip{cursor:pointer;user-select:none}
-.ui .chip input{position:absolute;opacity:0;width:1px;height:1px}
-.ui .chip:has(input:focus-visible) span{outline:3px solid var(--v-600);outline-offset:3px}
-.ui .pick{cursor:pointer}
-.ui .pick-top input[type="checkbox"]{position:absolute;opacity:0;width:1px;height:1px}
-.ui .pick:has(input:focus-visible){outline:3px solid var(--v-600);outline-offset:3px}
-.ui .pick.bad{border-color:var(--rose);background:var(--rose-50)}
-.ui select.inp{appearance:none;cursor:pointer}
-.ui textarea.inp{min-height:96px;line-height:1.5;resize:vertical}
-.ui .radius{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:99px;
-  background:var(--line-2);margin-top:14px;outline:none}
-.ui .radius::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
-  background:var(--v-600);border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);cursor:pointer}
-.ui .radius::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--v-600);
-  border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2);cursor:pointer;border-color:#fff}
-.ui .radius:focus-visible{outline:3px solid var(--v-600);outline-offset:4px}
 
-/* The £ sits absolutely at left:12px, so the value needs the board's own
-   padding-left:26px to clear it. Tabular figures stop the price jittering. */
-.ui .money-in .inp{font-weight:800;font-variant-numeric:tabular-nums}
-
-/* The board draws a declaration as a static div with a .box span. Mine is a
-   label wrapping a real checkbox, which the build notes require for the
-   keyboard and screen reader. The native control has to be hidden or it draws
-   a second box beside the styled one. The focus ring moves to .box, since that
-   is what a sighted keyboard user can actually see. */
-.ui .ck{cursor:pointer}
-.ui .ck input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
-.ui .ck:has(input:focus-visible) .box{outline:3px solid var(--v-600);outline-offset:3px}
+/* Rail contrast. The board fades a whole upcoming step to .42, which caps the
+   step number at 2.27:1 — no foreground colour can clear 4.5:1 through that
+   much transparency, because opacity is applied to the composited row.
+   Fading the labels instead leaves the numeral at its own colour, 8.42:1,
+   and the hierarchy looks the same. */
+.ui .rail-step{opacity:1}
+.ui .rail-step > span:last-child{opacity:.42}
+.ui .rail-step.on > span:last-child{opacity:1}
+.ui .rail-step.done > span:last-child{opacity:.85}
