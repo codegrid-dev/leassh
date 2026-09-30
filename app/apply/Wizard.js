@@ -18,7 +18,6 @@ const save = (v) => {
 };
 
 export default function Wizard() {
-  const [ready, setReady] = useState(false);
   const [step, setStep] = useState(1);
   const [app, setApp] = useState({ applicantId: null, email: "", firstName: "" });
   const [details, setDetails] = useState({ firstName: "", lastName: "", email: "", mobile: "" });
@@ -30,7 +29,6 @@ export default function Wizard() {
       setDetails((d) => ({ ...d, ...(saved.details || {}) }));
       setStep(saved.step || 2);
     }
-    setReady(true);
   }, []);
 
   const goto = (n, next = app) => {
@@ -38,9 +36,10 @@ export default function Wizard() {
     save({ ...next, step: n, details });
   };
 
-  // Avoid rendering step 1 for a split second before the saved state loads.
-  if (!ready) return <Shell step={1} meta="Your details"><div className="card-body" /></Shell>;
-
+  // Step 1 renders on the server and on the first client pass, so the form is
+  // in the HTML rather than appearing after hydration. Someone resuming sees a
+  // brief step 1 before the effect moves them on, which is the rarer case and
+  // far better than every visitor watching an empty card.
   if (step === 1) {
     return (
       <Shell step={1} meta="Your details">
