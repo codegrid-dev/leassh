@@ -10,7 +10,7 @@ export const STEPS = [
 
 // The chrome every frame shares: wordmark, the two legal links, Save and exit,
 // the rail and the progress bar. "Save and exit returns to the homepage."
-export default function Shell({ step, meta, children }) {
+export default function Shell({ step, meta, children, allComplete = false }) {
   return (
     <div className="ui">
       <div className="ui-hdr">
@@ -30,7 +30,7 @@ export default function Shell({ step, meta, children }) {
             {STEPS.map((s) => (
               <div
                 key={s.n}
-                className={`rail-step${s.n === step ? " on" : s.n < step ? " done" : ""}`}
+                className={`rail-step${allComplete || s.n < step ? " done" : s.n === step ? " on" : ""}`}
                 aria-current={s.n === step ? "step" : undefined}
               >
                 <span className="rail-dot">{s.n}</span>
@@ -51,7 +51,7 @@ export default function Shell({ step, meta, children }) {
         <div className="card">
           <div className="card-top">
             <div className="pbar">
-              <i style={{ width: `${step * 25}%` }} />
+              <i style={{ width: `${allComplete ? 100 : step * 25}%` }} />
             </div>
             <div className="card-meta">
               <span>Step <b>{step}</b> of 4</span>

@@ -55,7 +55,10 @@ export default function Step1Details({ initial, onDone }) {
         setFatal(body.error || "Something went wrong. Please try again.");
         return;
       }
-      onDone({ applicantId: body.applicantId, email: v.email.trim(), firstName: v.firstName.trim() });
+      onDone({ applicantId: body.applicantId, details: {
+        firstName: v.firstName.trim(), lastName: v.lastName.trim(),
+        email: v.email.trim().toLowerCase(), mobile: v.mobile.trim(),
+      } });
     } catch {
       setFatal("Could not reach the server. Check your connection and try again.");
     } finally {

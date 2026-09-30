@@ -5,6 +5,8 @@ import Shell, { STEPS } from "./Shell";
 import Step1Details from "./Step1Details";
 import Step2Verify from "./Step2Verify";
 import Step3Profile from "./Step3Profile";
+import Step4Consent from "./Step4Consent";
+import Complete from "./Complete";
 import { RADIUS_DEFAULT } from "@/app/lib/profile";
 
 const KEY = "leashh.application";
@@ -23,6 +25,7 @@ export default function Wizard() {
   const [step, setStep] = useState(1);
   const [app, setApp] = useState({ applicantId: null, email: "", firstName: "" });
   const [details, setDetails] = useState({ firstName: "", lastName: "", email: "", mobile: "" });
+  const [reference, setReference] = useState(null);
   const [profile, setProfile] = useState({
     postcode: "", dateOfBirth: "", experience: "", hoursAWeek: "", bio: "",
     services: {}, animals: [], attributes: [], credentials: [], travelMiles: RADIUS_DEFAULT,
@@ -34,6 +37,7 @@ export default function Wizard() {
       setApp({ applicantId: saved.applicantId, email: saved.email, firstName: saved.firstName });
       setDetails((d) => ({ ...d, ...(saved.details || {}) }));
       if (saved.profile) setProfile((x) => ({ ...x, ...saved.profile }));
+      if (saved.reference) setReference(saved.reference);
       setStep(saved.step || 2);
     }
   }, []);
@@ -52,9 +56,12 @@ export default function Wizard() {
       <Shell step={1} meta="Your details">
         <Step1Details
           initial={details}
-          onDone={(next) => {
+          onDone={({ applicantId, details: d }) => {
+            const next = { applicantId, email: d.email, firstName: d.firstName };
             setApp(next);
-            goto(2, next);
+            setDetails(d);
+            setStep(2);
+            save({ ...next, step: 2, details: d, profile });
           }}
         />
       </Shell>
@@ -95,27 +102,34 @@ export default function Wizard() {
     );
   }
 
-  // Step 4 is next. The chrome stays honest rather than dead-ending.
+  if (step === 4) {
+    return (
+      <Shell step={4} meta="Check and consent">
+        <Step4Consent
+          applicantId={app.applicantId}
+          details={{ ...details, email: app.email }}
+          profile={profile}
+          onBack={() => goto(3)}
+          onEdit={(n) => goto(n)}
+          onDone={(ref) => {
+            setReference(ref);
+            setStep(5);
+            save({ ...app, step: 5, details, profile, reference: ref });
+          }}
+        />
+      </Shell>
+    );
+  }
+
   return (
-    <Shell step={4} meta="Check and consent">
-      <div className="card-body soon">
-        <div className="panel-ico ico-tick" style={{ margin: "0 auto 16px" }}>
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-            strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M20 6L9 17l-5-5" />
-          </svg>
-        </div>
-        <h3>Your answers are saved</h3>
-        <p>
-          The last step, where you check everything over and confirm the declarations, is being
-          finished now. Nothing has been sent to anyone yet, and nothing will be until you agree
-          to it there. We will email you the moment you can complete it.
-        </p>
-        <div style={{ marginTop: "24px", display: "flex", gap: "12px", justifyContent: "center" }}>
-          <button type="button" className="btn btn-out" onClick={() => goto(3)}>Back to my answers</button>
-          <Link href="/" className="btn btn-pri">Back to Leashh</Link>
-        </div>
-      </div>
+    <Shell step={4} meta="Complete" allComplete>
+      <Complete
+        firstName={details.firstName}
+        reference={reference}
+        postcode={profile.postcode}
+        miles={profile.travelMiles}
+        onReset={() => { try { localStorage.removeItem(KEY); } catch {} }}
+      />
     </Shell>
   );
 }
