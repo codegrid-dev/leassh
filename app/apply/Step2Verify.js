@@ -112,7 +112,7 @@ export default function Step2Verify({ applicantId, email, onDone, onEmailChanged
       });
       const body = await res.json().catch(() => ({}));
       if (res.ok) {
-        onEmailChanged(newEmail.trim().toLowerCase());
+        onEmailChanged(newEmail.trim().toLowerCase(), body.applicantId);
         setChanging(false); setDigits(Array(LEN).fill("")); setLockedOut(false); setError(null);
         setNotice("Code sent to your new address.");
         boxes.current[0]?.focus();

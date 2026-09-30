@@ -74,8 +74,8 @@ export default function Wizard() {
         <Step2Verify
           applicantId={app.applicantId}
           email={app.email}
-          onEmailChanged={(email) => {
-            const next = { ...app, email };
+          onEmailChanged={(email, newId) => {
+            const next = { ...app, email, applicantId: newId || app.applicantId };
             setApp(next);
             save({ ...next, step: 2, details, profile });
           }}
