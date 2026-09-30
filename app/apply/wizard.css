@@ -79,8 +79,9 @@
 .ui .note-a svg{color:var(--amber-ink)}
 .ui .note a{color:var(--v-700);font-weight:700}
 .ui .chips{display:flex;flex-wrap:wrap;gap:8px}
-.ui .chip{display:inline-block;padding:9px 14px;border-radius:999px;border:1.5px solid var(--line);font-size:13.2px;font-weight:600;background:#fff;color:var(--ink)}
-.ui .chip.on{background:var(--v-600);border-color:var(--v-600);color:#fff;font-weight:700}
+.ui .chip{position:relative;display:inline-block}
+.ui .chip span{display:inline-block;padding:9px 14px;border-radius:999px;border:1.5px solid var(--line);font-size:13.2px;font-weight:600;background:#fff;color:var(--ink)}
+.ui .chip.on span{background:var(--v-600);border-color:var(--v-600);color:#fff;font-weight:700}
 .ui .pick{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;background:#fff;margin-bottom:9px}
 .ui .pick.on{border-color:var(--v-500);background:var(--v-50);box-shadow:0 0 0 4px rgba(148,87,255,.09)}
 .ui .pick-top{display:flex;align-items:center;gap:12px}
@@ -199,7 +200,7 @@
 .ui /* Live controls for step 3. The board draws these as static spans. */
 .chip{cursor:pointer;user-select:none}
 .ui .chip input{position:absolute;opacity:0;width:1px;height:1px}
-.ui .chip:has(input:focus-visible){outline:3px solid var(--v-600);outline-offset:3px}
+.ui .chip:has(input:focus-visible) span{outline:3px solid var(--v-600);outline-offset:3px}
 .ui .pick{cursor:pointer}
 .ui .pick-top input[type="checkbox"]{position:absolute;opacity:0;width:1px;height:1px}
 .ui .pick:has(input:focus-visible){outline:3px solid var(--v-600);outline-offset:3px}
