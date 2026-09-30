@@ -25,7 +25,13 @@ export default function Step1Details({ initial, onDone }) {
     const el = first && refs.current[first];
     if (!el) return;
     window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 140, behavior: "smooth" });
-    setTimeout(() => el.focus({ preventScroll: true }), 300);
+    setTimeout(() => {
+      // Do not steal focus if the applicant has already started interacting
+      // with something else in the meantime.
+      const a = document.activeElement;
+      if (a && a !== document.body && a.matches("input,select,textarea,button,a")) return;
+      el.focus?.({ preventScroll: true });
+    }, 300);
   };
 
   const submit = async (e) => {

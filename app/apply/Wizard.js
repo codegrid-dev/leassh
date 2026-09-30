@@ -4,6 +4,8 @@ import Link from "next/link";
 import Shell, { STEPS } from "./Shell";
 import Step1Details from "./Step1Details";
 import Step2Verify from "./Step2Verify";
+import Step3Profile from "./Step3Profile";
+import { RADIUS_DEFAULT } from "@/app/lib/profile";
 
 const KEY = "leashh.application";
 
@@ -21,19 +23,24 @@ export default function Wizard() {
   const [step, setStep] = useState(1);
   const [app, setApp] = useState({ applicantId: null, email: "", firstName: "" });
   const [details, setDetails] = useState({ firstName: "", lastName: "", email: "", mobile: "" });
+  const [profile, setProfile] = useState({
+    postcode: "", dateOfBirth: "", experience: "", hoursAWeek: "", bio: "",
+    services: {}, animals: [], attributes: [], credentials: [], travelMiles: RADIUS_DEFAULT,
+  });
 
   useEffect(() => {
     const saved = load();
     if (saved?.applicantId) {
       setApp({ applicantId: saved.applicantId, email: saved.email, firstName: saved.firstName });
       setDetails((d) => ({ ...d, ...(saved.details || {}) }));
+      if (saved.profile) setProfile((x) => ({ ...x, ...saved.profile }));
       setStep(saved.step || 2);
     }
   }, []);
 
   const goto = (n, next = app) => {
     setStep(n);
-    save({ ...next, step: n, details });
+    save({ ...next, step: n, details, profile });
   };
 
   // Step 1 renders on the server and on the first client pass, so the form is
@@ -63,7 +70,7 @@ export default function Wizard() {
           onEmailChanged={(email) => {
             const next = { ...app, email };
             setApp(next);
-            save({ ...next, step: 2, details });
+            save({ ...next, step: 2, details, profile });
           }}
           onDone={() => goto(3)}
         />
@@ -71,9 +78,26 @@ export default function Wizard() {
     );
   }
 
-  // Steps 3 and 4 are next. The chrome stays honest rather than dead-ending.
+  if (step === 3) {
+    return (
+      <Shell step={3} meta="About you">
+        <Step3Profile
+          applicantId={app.applicantId}
+          initial={profile}
+          onBack={() => goto(2)}
+          onDone={(next) => {
+            setProfile(next);
+            setStep(4);
+            save({ ...app, step: 4, details, profile: next });
+          }}
+        />
+      </Shell>
+    );
+  }
+
+  // Step 4 is next. The chrome stays honest rather than dead-ending.
   return (
-    <Shell step={3} meta={STEPS[2].title}>
+    <Shell step={4} meta="Check and consent">
       <div className="card-body soon">
         <div className="panel-ico ico-tick" style={{ margin: "0 auto 16px" }}>
           <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -81,13 +105,14 @@ export default function Wizard() {
             <path d="M20 6L9 17l-5-5" />
           </svg>
         </div>
-        <h3>Your email is confirmed</h3>
+        <h3>Your answers are saved</h3>
         <p>
-          That is the only check we make. The rest of the form, where you set your services and
-          your rates, is being finished now. We have your details safe and we will email you the
-          moment you can carry on.
+          The last step, where you check everything over and confirm the declarations, is being
+          finished now. Nothing has been sent to anyone yet, and nothing will be until you agree
+          to it there. We will email you the moment you can complete it.
         </p>
-        <div style={{ marginTop: "24px" }}>
+        <div style={{ marginTop: "24px", display: "flex", gap: "12px", justifyContent: "center" }}>
+          <button type="button" className="btn btn-out" onClick={() => goto(3)}>Back to my answers</button>
           <Link href="/" className="btn btn-pri">Back to Leashh</Link>
         </div>
       </div>
