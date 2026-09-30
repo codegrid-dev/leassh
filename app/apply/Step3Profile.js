@@ -191,6 +191,7 @@ export default function Step3Profile({ applicantId, initial, onBack, onDone }) {
                 <span className="money-in">
                   <span>£</span>
                   <input
+                    className="inp"
                     ref={(el) => (priceRefs.current[s.k] = el)}
                     value={v.services[s.k]} inputMode="decimal"
                     aria-label={`Your price for ${s.n}`}
