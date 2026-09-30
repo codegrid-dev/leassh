@@ -1,0 +1,11 @@
+/* Shared shell for the legal pages until the real documents arrive. */
+.legal-hd{background:var(--grad);color:#fff;padding:92px 0 64px;position:relative;overflow:hidden}
+.legal-hd::after{content:"";position:absolute;width:520px;height:520px;border-radius:50%;
+  background:rgba(0,184,124,.20);filter:blur(80px);bottom:-320px;left:50%;transform:translateX(-50%)}
+.legal-in{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:0 22px}
+.legal-hd .mark{font-family:var(--font-script),cursive;font-size:32px;display:inline-block;
+  margin-bottom:26px;color:#fff;text-decoration:none}
+.legal-hd h1{font-size:clamp(32px,4.2vw,48px);letter-spacing:-.035em;line-height:1.06}
+.legal-body{max-width:860px;margin:0 auto;padding:54px 22px 90px}
+.legal-body p{color:var(--ink-2);margin-bottom:18px;max-width:74ch}
+.legal-body a{color:var(--v-700);font-weight:700}
